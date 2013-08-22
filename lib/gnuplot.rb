@@ -99,7 +99,7 @@ module Gnuplot
       @data = []
       @styles = []
       yield self if block_given?
-      puts "writing this to gnuplot:\n" + to_gplot + "\n" if $VERBOSE
+      puts "writing this to gnuplot:\n" + to_gplot + "\n" + store_datasets + "\n" if $VERBOSE
 
       if io    
         io << to_gplot
