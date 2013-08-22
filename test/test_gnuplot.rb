@@ -56,11 +56,13 @@ class PlotTest < Test::Unit::TestCase
     plot = Gnuplot::Plot.new do |p|
       p.set "output", "'foo'"
       p.set "terminal", "postscript enhanced"
+      p.unset "border"
     end
 
-    assert( plot.sets ==
-		 [ ["output", "'foo'"], 
-		   ["terminal", "postscript enhanced"] ] )
+    assert( plot.settings ==
+		 [ [:set, "output", "'foo'"], 
+		   [:set, "terminal", "postscript enhanced"],
+                   [:unset, "border"] ] )
     
 
     assert( plot.to_gplot, \
@@ -76,6 +78,44 @@ class PlotTest < Test::Unit::TestCase
 
     plot.set "title", "'foo'"
     assert "'foo'", plot["title"]
+  end
+
+  def test_unset
+    plot = Gnuplot::Plot.new do |p|
+      p.unset "title"
+    end
+    assert_nil plot["title"]
+
+    plot.unset "title"
+    assert_nil plot["title"]
+  end
+
+  def test_style
+    plot = Gnuplot::Plot.new do |p|
+      s1 = p.style do |s|
+        s.ls = 1
+        s.lt = 1
+        s.lc = 1
+        s.pt = 1
+        s.ps = 1
+      end
+      assert s1.to_s == "set style line 1 ls 1 lt 1 lc 1 pt 1 ps 1", "correct style definition"
+      assert s1.index == 1, "set index correctly"
+
+      s2 = p.style do |s|
+        s.ls = 2
+      end
+      assert s2.to_s == "set style line 2 ls 2", "correct style definition"
+      assert s2.index == 2, "index must be incremented"
+
+      ds = Gnuplot::DataSet.new do |ds|
+        ds.with = "lines" 
+        ds.linestyle = s1
+        ds.data = [ [0, 1, 2], [1, 2, 5] ]
+      end
+
+      assert ds.plot_args == "'-' with lines linestyle 1", "convert linestyle to index" # index of s1
+    end
   end
 
 end

@@ -1,3 +1,18 @@
+2.6.1
+* TheKnight 	Fix bug in SPlot.to_gplot implementation. 
+
+2.6.0
+* better readme, allow for unsetting variables, thanks @kot-behemoth and @evnu
+
+2.5.0
+ * save output to instance variable, thanks for the patch.
+
+2.4.1
+ * Quote escape more strings. Thanks for the tip!
+
+2.4.0
+ * Allow for 3D plots, fix examples. Thanks everybody!
+
 2.3.6
  * Cleanup readme (thanks blambeau again, really, for the snippets)
 
